@@ -46,4 +46,38 @@ namespace Terminate
 			Put(ch);
 		}
 
+
+	void
+	TTY::Put( char c )
+		{
+		Char ch;
+		ch.SetChar(c);
+		ch.SetPriColor(pri);
+		ch.SetSecColor(sec);
+		Put(ch);
+		}
+
+
+	void
+	TTY::Put( const std::string& str )
+		{
+		for( auto c : str )
+			Put(c);
+		}
+
+
+	void
+	TTY::SetPriColor( Color color )
+		{
+		pri = color;
+		}
+
+
+	void
+	TTY::SetSecColor( Color color )
+		{
+		sec = color;
+		}
+
+
 	} // namespace Terminate

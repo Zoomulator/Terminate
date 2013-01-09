@@ -15,10 +15,15 @@ namespace Terminate
 			void PlaceCursor( size_t x, size_t y );
 			void Put( Char );
 			void Put( const String& );
+			void Put( char );
+			void Put( const std::string& );
+			void SetPriColor( Color );
+			void SetSecColor( Color );
 		private:
 			CharBuffer* buffer;
 			size_t curs_x, curs_y;
 			unsigned int state;
+			Color pri,sec;
 		};
 
 	} // namespace Terminate

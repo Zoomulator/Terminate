@@ -11,45 +11,38 @@ SDL_Surface* screen;
 int main( int argc, char* argv[] )
 	{
 	SDL_Init( SDL_INIT_VIDEO );
-	IMG_Init( IMG_INIT_PNG );
 	atexit(SDL_Quit);
 	atexit(IMG_Quit);
 	Terminate::Context term;
 	term.SetTilemap( "tiles2.png" );
 	Terminate::Window win(term, 20, 15);
+	Terminate::TTY tty( win.GetBuffer() );
 	screen = SDL_SetVideoMode( 
 		win.GetWindowPixWidth(),
 		win.GetWindowPixHeight(),
 		32, SDL_SWSURFACE );
 	std::string hello("Hello, terminal!");
-	Terminate::Char ch;
-	ch.SetPriColor( {0,0,0,255} );
-	ch.SetSecColor( {0,255,0,255} );
-
-	for( size_t i=0; i<hello.length(); ++i )
+	for( char& c : hello )
 		{
-		ch.SetChar( hello[i] );
-		ch.SetPriColor( { 
+		tty.SetPriColor( { 
 			static_cast<Uint8>(rand()%255),
 			static_cast<Uint8>(rand()%255),
 			static_cast<Uint8>(rand()%255),
 			255 } );
-		ch.SetSecColor( {
+		tty.SetSecColor( {
 			static_cast<Uint8>(rand()%255),
 			static_cast<Uint8>(rand()%255),
 			static_cast<Uint8>(rand()%255),
 			255 } );
-		win.PutChar( i, 0, ch );
+		tty.Put( c );
 		win.Render(screen);
 		SDL_Flip(screen);
 		SDL_Delay(50);
 		}
-	Terminate::TTY tty( win.GetBuffer() );
-	Terminate::String gogoStr = Terminate::MakeString( "DONE!" );
-	Terminate::SetPriColor( gogoStr, { 255,200,0,255 } );
-	Terminate::SetSecColor( gogoStr, { 0,0,0,255 } );
+	tty.SetPriColor( { 255,200,0,255 } );
+	tty.SetSecColor( { 0,0,0,255 } );
 	tty.PlaceCursor( 0, 3 );
-	tty.Put( gogoStr );
+	tty.Put( "Done!" );
 
 	win.Render(screen);
 	SDL_Flip(screen);
