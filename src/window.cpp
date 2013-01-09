@@ -38,7 +38,6 @@ namespace Terminate
 		for( size_t x=0; x < buffer.Width(); ++x )
 			{
 			Char ch = buffer.GetChar(x,y);
-			std::cout << ch.GetPriColor() << " : " << ch.GetSecColor() << std::endl;
 			SDL_Color colors[2] = { ch.GetPriColor(), ch.GetSecColor() };
 			if( SDL_SetColors( context->GetTilemap(), colors, 0, 2 ) == 0 )
 				throw std::runtime_error( "Tilemap missing palette." );

@@ -10,6 +10,8 @@ add_library( Terminate
 	src/char.cpp
 	src/charbuffer.cpp
 	src/context.cpp
+	src/string.cpp
+	src/tty.cpp
 	src/window.cpp
 	)
 

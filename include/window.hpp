@@ -16,6 +16,7 @@ namespace Terminate
 			PixDim GetWindowPixWidth() const;
 			PixDim GetWindowPixHeight() const;
 			void Render( SDL_Surface* );
+			CharBuffer& GetBuffer() { return buffer; }
 
 			void PutChar( size_t x, size_t y, Char c ) 
 				{ buffer.PutChar(x,y,c); };

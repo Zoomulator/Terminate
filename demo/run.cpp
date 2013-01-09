@@ -42,8 +42,15 @@ int main( int argc, char* argv[] )
 		win.PutChar( i, 0, ch );
 		win.Render(screen);
 		SDL_Flip(screen);
-		SDL_Delay(250);
+		SDL_Delay(50);
 		}
+	Terminate::TTY tty( win.GetBuffer() );
+	Terminate::String gogoStr = Terminate::MakeString( "DONE!" );
+	Terminate::SetPriColor( gogoStr, { 255,200,0,255 } );
+	Terminate::SetSecColor( gogoStr, { 0,0,0,255 } );
+	tty.PlaceCursor( 0, 3 );
+	tty.Put( gogoStr );
+
 	win.Render(screen);
 	SDL_Flip(screen);
 	bool running = true;
