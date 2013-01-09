@@ -5,7 +5,7 @@
 #include <SDL/SDL.h>
 
 
-namespace Terminate
+namespace Term
 	{
 
 
@@ -28,6 +28,6 @@ namespace Terminate
 			Color secColor;
 		};
 
-	} // namespace Terminate
+	} // namespace Term
 
 #endif //TERMINATE_CHAR_HPP

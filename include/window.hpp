@@ -5,7 +5,7 @@
 #include "context.hpp"
 
 
-namespace Terminate
+namespace Term
 	{
 
 	class Window
@@ -29,6 +29,6 @@ namespace Terminate
 			Context* context;
 		};
 
-	} // namespace Terminate
+	} // namespace Term
 
 #endif //TERMINATE_WINDOW_HPP

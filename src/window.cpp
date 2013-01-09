@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-namespace Terminate
+namespace Term
 	{
 
 
@@ -71,4 +71,4 @@ namespace Terminate
 		{
 		return Height() * context->GetTileHeight();
 		}
-	};
+	}// namespace Term

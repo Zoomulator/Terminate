@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 
-namespace Terminate
+namespace Term
 	{
 
 	
@@ -60,4 +60,4 @@ namespace Terminate
 		}
 
 
-	} // namespace Terminate
+	} // namespace Term

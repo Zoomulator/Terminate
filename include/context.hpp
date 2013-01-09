@@ -4,7 +4,7 @@
 #include <SDL/SDL.h>
 #include <string>
 
-namespace Terminate
+namespace Term
 	{
 	typedef int TileCount;
 	typedef int TileSize;
@@ -24,6 +24,6 @@ namespace Terminate
 			SDL_Surface* tilemap;
 		};
 
-	} // namespace Terminate
+	} // namespace Term
 
 #endif //TERMINATE_CONTEXT_HPP

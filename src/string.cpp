@@ -1,6 +1,6 @@
 #include "string.hpp"
 
-namespace Terminate
+namespace Term
 	{
 
 
@@ -34,4 +34,4 @@ namespace Terminate
 		}
 
 
-	} // namespace Terminate
+	} // namespace Term

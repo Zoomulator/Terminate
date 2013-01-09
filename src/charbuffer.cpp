@@ -5,7 +5,7 @@
 using std::max;
 using std::min;
 
-namespace Terminate
+namespace Term
 	{
 
 
@@ -60,4 +60,4 @@ namespace Terminate
 			PutChar( dx, dy, other.GetChar(sx, sy) );
 		}
 
-	} // namespace Terminate
+	} // namespace Term

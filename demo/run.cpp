@@ -13,10 +13,10 @@ int main( int argc, char* argv[] )
 	SDL_Init( SDL_INIT_VIDEO );
 	atexit(SDL_Quit);
 	atexit(IMG_Quit);
-	Terminate::Context term;
+	Term::Context term;
 	term.SetTilemap( "tiles2.png" );
-	Terminate::Window win(term, 20, 15);
-	Terminate::TTY tty( win.GetBuffer() );
+	Term::Window win(term, 20, 15);
+	Term::TTY tty( win.GetBuffer() );
 	screen = SDL_SetVideoMode( 
 		win.GetWindowPixWidth(),
 		win.GetWindowPixHeight(),

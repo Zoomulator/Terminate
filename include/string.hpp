@@ -4,7 +4,7 @@
 #include <string>
 #include "char.hpp"
 
-namespace Terminate
+namespace Term
 	{
 
 	struct Term_char_traits : public std::char_traits<Char>
@@ -41,5 +41,5 @@ namespace Terminate
 	void SetSecColor( String&, Color );
 
 
-	} // namespace Terminate
+	} // namespace Term
 #endif //TERMINATE_STRING_HPP

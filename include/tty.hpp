@@ -4,7 +4,7 @@
 #include "charbuffer.hpp"
 #include "string.hpp"
 
-namespace Terminate
+namespace Term
 	{
 
 	class TTY
@@ -26,6 +26,6 @@ namespace Terminate
 			Color pri,sec;
 		};
 
-	} // namespace Terminate
+	} // namespace Term
 
 #endif // TERMINATE_TTY_HPP
