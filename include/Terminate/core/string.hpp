@@ -1,3 +1,10 @@
+/////////////////////////////////////////////
+// Copyright (c) 2013 Kim Simmons
+// Distributed under the Zlib/libPNG license.
+// Read LICENSE.txt accompanying this source 
+// for more information.
+/////////////////////////////////////////////
+
 #ifndef TERMINATE_STRING_HPP
 #define TERMINATE_STRING_HPP
 

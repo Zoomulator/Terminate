@@ -1,3 +1,10 @@
+/////////////////////////////////////////////
+// Copyright (c) 2013 Kim Simmons
+// Distributed under the Zlib/libPNG license.
+// Read LICENSE.txt accompanying this source 
+// for more information.
+/////////////////////////////////////////////
+
 #include "string.hpp"
 
 namespace Term
