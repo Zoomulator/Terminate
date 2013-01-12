@@ -12,6 +12,7 @@ if( UseSDL AND BuildDemos )
 
 	if( DEFINED SDL_FOUND AND DEFINED SDLIMAGE_FOUND )
 		include_directories( ${SDL_INCLUDE_DIR} ${SDLIMAGE_INCLUDE_DIR} )
+		unset( SDL_BUILDING_LIBRARY )
 
 		set( OUTPUT_DIR ${TERMINATE_SOURCE_DIR}/bin/demo )
 
