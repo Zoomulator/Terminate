@@ -24,7 +24,7 @@ namespace Term
 	class Char
 		{
 		public:
-			Char();
+			Char() = default;
 			Char( char8_t, uint8_t pal_i, Color, Color );
 			Char( char8_t, uint8_t pal_i=0 );
 			char GetChar() const;
