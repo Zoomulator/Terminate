@@ -1,0 +1,54 @@
+
+Notes on how to build and install Terminate from source
+
+1. CMake
+The default build system for Terminate is CMake.
+For those not familiar with it, it stands for
+Cross platform Make and you can find more info
+on www.cmake.org
+
+1.2 CMake Linux
+Most distros have CMake in their package installers.
+Ubuntu:
+	#aptitude or apt-get
+	sudo aptitude install cmake
+Fedora
+	sudo yum install cmake
+
+Make sure that SDL1.2-dev is installed
+	aptitude search libsdl1.2-dev
+	aptitude search libsdl-image1.2-dev
+
+
+See build options for installing without SDL
+
+Then to build and install Terminate:
+terminate/$ mkdir build
+terminate/$ cd build;
+terminate/build/$ cmake ../ [options]
+terminate/build/$ make
+terminate/build/$ make install
+
+Some systems require 'sudo' for the last step even
+though it targets the /usr/local folder.
+
+
+1.3 Cmake osX
+The build and install should be equal to Linux
+
+However the GNU libstdc++ provided by osx may
+be out of date and thereby lacking certain C++11
+functionality. This typically manifests itself in
+failing to compile because <cstdint> is missing and
+there's no std::unique_ptr defined in <memory>.
+This can be solved by turning on the LLVMlibcxx
+option, causing clang to link to llvms c++ stdlib
+instead. See 2. buil options
+
+2. CMake build options
+It's possible to give CMake the following project
+specific options:
+-DUseSDL=OFF     # Disables installing SDL dependent components. Demos are disabled.
+-DBuildDemos=OFF # Don't build the demos :(
+-DLLVMcxx=ON     # Link LLVM's libc++ as standard library. -stdlib=libc++
+

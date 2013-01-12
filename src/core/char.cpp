@@ -12,10 +12,6 @@ namespace Term
 	{
 
 
-	Char::Char()
-		{}
-
-
 	Char::Char( char8_t c_, uint8_t pal,
 		Color pri, Color sec) :
 		c(c_),

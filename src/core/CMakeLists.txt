@@ -1,7 +1,13 @@
 include_directories(${TERMINATE_SOURCE_DIR}/include/Terminate/core)
-add_library( Terminate
-	char.cpp
-	charbuffer.cpp
-	string.cpp
-	tty.cpp
+file( GLOB_RECURSE CORE_SOURCE_FILES *.cpp )
+add_library( Terminate SHARED ${CORE_SOURCE_FILES} )
+add_library( Terminate_static STATIC ${CORE_SOURCE_FILES} )
+set_target_properties( Terminate Terminate_static
+	PROPERTIES
+	 SOVERSION 0
+	 VERSION 1.0.0
 	)
+
+install( TARGETS Terminate Terminate_static
+	LIBRARY DESTINATION lib 
+	ARCHIVE DESTINATION lib )

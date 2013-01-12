@@ -5,7 +5,7 @@ Copyright (c) 2013 Kim Simmons
 
 
 1. Dependencies
-Written in C++11
+Written in C++11 using CMake as build system
 For instant satisfaction, SDL1.2 and SDL_image is required
 but is easily replaceable. The dependence is put in a
 separate library. However the demos requires SDL to compile.
@@ -23,9 +23,9 @@ with greenscreens and punchcards.
 
 3. Features
 * 8bit charmap loading (indexed png)
-* Two colors per character: Background and fontcolor
+* Two 24bit colors per character: Background and fontcolor
 * Easy typing onto buffers with the TTY class acting as cursor.
-* TTY typing with insert and wrap
+* TTY typing with insert, scroll and wrap
 * Copy character buffers onto others with position and size.
 
 
