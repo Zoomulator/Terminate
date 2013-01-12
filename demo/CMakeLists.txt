@@ -27,6 +27,8 @@ if( UseSDL AND BuildDemos )
 		add_executable( PrintFile printfile.cpp )
 		target_link_libraries( PrintFile Terminate TerminateSDL ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} )
 		install( TARGETS PrintFile DESTINATION ${OUTPUT_DIR} ) 
+
+		install(FILES "../tileset.png" DESTINATION ${OUTPUT_DIR})
 	elseif( NOT DEFINED SDL_FOUND )
 		message( ERROR "SDL not found!" )
 	else()

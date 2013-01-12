@@ -13,7 +13,7 @@ if( UseSDL )
 
 	if( DEFINED SDL_FOUND AND DEFINED SDLIMAGE_FOUND )
 		include_directories( ${SDL_INCLUDE_DIR} ${SDLIMAGE_INCLUDE_DIR} )
-		set( SDL_BUILDING_LIBRARY YES )
+#		set( SDL_BUILDING_LIBRARY YES )
 		add_library( TerminateSDL SHARED ${TERMSDL_SOURCE_FILES} )
 		target_link_libraries( TerminateSDL Terminate ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} )
 

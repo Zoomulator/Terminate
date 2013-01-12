@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 2.6)
-project(TERMINATE CXX)
+cmake_minimum_required(VERSION 2.8)
+project(TERMINATE C CXX)
 
 
 if( ${CMAKE_SYSTEM_NAME} MATCHES Linux )
-	set( CMAKE_INSTALL_PREFIX /bin/ )
+	set( CMAKE_INSTALL_PREFIX /usr/ )
 endif()
 message( "Installs libraries to ${CMAKE_INSTALL_PREFIX}")
 
