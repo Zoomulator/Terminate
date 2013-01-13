@@ -20,6 +20,10 @@ if( UseSDL AND BuildDemos )
 		target_link_libraries( TTYTest Terminate TerminateSDL ${SDL_LIBS} )
 		install( TARGETS TTYTest DESTINATION ${OUTPUT_DIR} ) 
 
+		add_executable( Maze maze.cpp )
+		target_link_libraries( Maze Terminate TerminateSDL ${SDL_LIBS} )
+		install( TARGETS Maze DESTINATION ${OUTPUT_DIR} )
+
 		add_executable( Marquee marquee.cpp )
 		target_link_libraries( Marquee Terminate TerminateSDL ${SDL_LIBS} )
 		install( TARGETS Marquee DESTINATION ${OUTPUT_DIR} ) 
