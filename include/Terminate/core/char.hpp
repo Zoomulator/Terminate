@@ -14,7 +14,7 @@
 
 namespace Term
 	{
-	typedef uint8_t char8_t;
+	typedef uint8_t uchar8_t;
 
 	struct Color
 		{
@@ -25,10 +25,10 @@ namespace Term
 		{
 		public:
 			Char() = default;
-			Char( char8_t, uint8_t pal_i, Color, Color );
-			Char( char8_t, uint8_t pal_i=0 );
-			char GetChar() const;
-			void SetChar( char );
+			Char( uchar8_t, uint8_t pal_i, Color, Color );
+			Char( uchar8_t, uint8_t pal_i=0 );
+			uchar8_t GetChar() const;
+			void SetChar( uchar8_t );
 
 			void SetPriColor( Color );
 			Color GetPriColor() const;
@@ -37,7 +37,7 @@ namespace Term
 		private:
 			union
 				{
-				struct { char8_t c; uint8_t pal_i; };
+				struct { uchar8_t c; uint8_t pal_i; };
 				char16_t wc;
 				};
 

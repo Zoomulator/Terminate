@@ -72,6 +72,11 @@ int main( int argc, char* argv[] )
 	ss << "Char size: " << sizeof(Term::Char);
 	tty.PlaceCursor( 0, 14 );
 	tty.Put( ss.str() );
+
+	tty.PlaceCursor(0,2);
+	for( int i=0; i < 20; ++i )
+		tty.Put( (char) i+127 );	
+
 	term.Print();
 	SDL_Flip(screen);
 

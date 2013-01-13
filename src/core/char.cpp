@@ -12,7 +12,7 @@ namespace Term
 	{
 
 
-	Char::Char( char8_t c_, uint8_t pal,
+	Char::Char( uchar8_t c_, uint8_t pal,
 		Color pri, Color sec) :
 		c(c_),
 		pal_i(pal),
@@ -21,7 +21,7 @@ namespace Term
 		{}
 
 
-	Char::Char( char8_t c_, uint8_t pal ) :
+	Char::Char( uchar8_t c_, uint8_t pal ) :
 		c(c_),
 		pal_i(pal),
 		priColor{255,255,255},
@@ -29,7 +29,7 @@ namespace Term
 		{}
 
 
-	char
+	uchar8_t
 	Char::GetChar() const
 		{
 		return c;
@@ -37,7 +37,7 @@ namespace Term
 
 
 	void
-	Char::SetChar( char newC )
+	Char::SetChar( uchar8_t newC )
 		{
 		c = newC;
 		}

@@ -5,7 +5,7 @@ add_library( Terminate_static STATIC ${CORE_SOURCE_FILES} )
 set_target_properties( Terminate Terminate_static
 	PROPERTIES
 	 SOVERSION 0
-	 VERSION 1.0.0
+	 VERSION 1.0.1
 	)
 
 install( TARGETS Terminate Terminate_static
