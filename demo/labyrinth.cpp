@@ -6,7 +6,8 @@
 #include <Terminate/sdl/context.hpp>
 
 // Possible movement. Each direction has dx,dy and a flag bit
-const int dirs[4][2] = { {0,-1}, {1,0}, {0,1}, {-1,0} };
+enum { North=1, East=2, South=4, West=8 };
+const int dirs[4][3] = { {0,-1,North}, {1,0,East}, {0,1,South}, {-1,0,West} };
 enum { IsWall=0, IsPath };
 
 SDL_Surface* screen;
@@ -64,12 +65,10 @@ GenerateLabyrinth( LabData& lab )
 			lab.walls[ ( x + dirs[d][0] ) + ( y + dirs[d][1] )*lab.width ] = IsPath;
 			lab.walls[ (x + dirs[d][0]*2) + (y + dirs[d][1]*2)*lab.width ] = IsPath;
 			path.push_back(ineighbor);
-			std::cout << "(" << xneighbor << ":" << yneighbor << ")-> " << std::endl; 
 			}
 		else // Backtrack!
 			{
 			path.pop_back();
-			std::cout << "<- ";
 			}
 		}
 	while( path.size() > 1 );
@@ -102,13 +101,58 @@ main( int argc, char* argv[] )
 	SDL_Flip(screen);
 
 	GenerateLabyrinth( lab );
-	tty.PlaceCursor(0,0);
-	tty.Set( Term::TTY::Wrap );
-	for( auto wall : lab.walls )
-		if( wall == IsWall )
-			tty.Put( 254 );
-		else
+	for( size_t y=0; y < lab.height; ++y )
+	for( size_t x=0; x < lab.width; ++x )
+		{
+		if( lab.walls[ x + y * lab.width ] == IsPath ) 
+			{
+			tty.PlaceCursor(x,y);
 			tty.Put( 176 );
+			continue;
+			}
+		
+		int neighbors = 0; // Neighbor bits.
+		for( size_t d=0; d<4; ++d )
+			{
+			int xneighbor = x + dirs[d][0];
+			int yneighbor = y + dirs[d][1];
+			if( xneighbor < lab.width  && xneighbor >= 0 &&
+				yneighbor < lab.height && yneighbor >= 0 &&
+				lab.walls[ xneighbor + yneighbor*lab.width ] == IsWall )
+				neighbors |= dirs[d][2]; // add bit
+			}
+		Term::Char::char_t c;
+		switch( neighbors )
+			{
+			case North: case South: case North|South:
+				c = 179; break;
+			case East: case West: case East|West:
+				c = 196; break;
+			case North|East:
+				c = 192 ; break;
+			case North|West:
+				c = 217; break;
+			case South|West:
+				c = 191; break;
+			case South|East:
+				c = 218; break;
+			case North|West|South:
+				c = 180; break;
+			case West|North|East:
+				c = 193; break;
+			case West|South|East:
+				c = 194; break;
+			case North|East|South:
+				c = 195; break;
+			case North|East|South|West:
+				c = 197; break;
+			default:
+				c = 176;
+			}
+		tty.PlaceCursor(x,y);
+		tty.Put( c );
+		}
+
 
 	term.Print();
 	SDL_Flip(screen);
