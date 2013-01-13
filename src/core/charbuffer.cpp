@@ -68,7 +68,10 @@ namespace Term
 	Char
 	CharBuffer::Get( size_t x, size_t y ) const
 		{
-		return buffer[x+y*width];
+		if( x < width && y < height )
+			return buffer[x+y*width];
+		else
+			return Char();
 		}
 
 
