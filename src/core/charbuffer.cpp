@@ -88,10 +88,12 @@ namespace Term
 
 	void
 	CharBuffer::Copy( const CharBuffer& other, int dx, int dy,
-		size_t sx, size_t sy, size_t sw, size_t sh )
+		int sx, int sy, size_t sw, size_t sh )
 		{
-		for( size_t y=0; y < sh; ++y )
-		for( size_t x=0; x < sw; ++x )
+		sh = min( sh, other.Height() - sy );
+		sw = min( sw, other.Width() - sx );
+		for( size_t y=max(-sy,0); y < sh; ++y )
+		for( size_t x=max(-sx,0); x < sw; ++x )
 			{
 			Put( dx+x, dy+y, other.Get(sx+x,sy+y) );
 			}

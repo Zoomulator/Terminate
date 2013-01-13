@@ -29,7 +29,7 @@ namespace Term
 			Char Get( size_t x, size_t y ) const;
 			void Scroll( int rows, int cols=0);
 			void Copy( const CharBuffer&, int dx, int dy, 
-				size_t sx, size_t sy, size_t sw, size_t sh );
+				int sx, int sy, size_t sw, size_t sh );
 			void Copy( const CharBuffer& );
 
 		private:
