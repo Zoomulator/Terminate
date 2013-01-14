@@ -1,4 +1,6 @@
 #include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <vector>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
@@ -8,10 +10,9 @@
 // Possible movement. Each direction has dx,dy and a flag bit
 enum { North=1, East=2, South=4, West=8 };
 const int dirs[4][3] = { {0,-1,North}, {1,0,East}, {0,1,South}, {-1,0,West} };
-enum { IsWall=0, IsPath };
+enum { IsWall=0, IsPath, IsToken, IsDoor };
 
 SDL_Surface* screen;
-Term::SDL::Context* p_term;
 
 struct
 LabData
@@ -19,23 +20,82 @@ LabData
 	typedef std::vector<Uint8> WallData;
 	typedef std::vector<Uint32> TokenData;
 	Uint8 width, height;
+	Term::CharBuffer symbuf;
 	WallData walls;
 	TokenData tokens;
+	size_t xplayer, yplayer;
+	Uint32 door;
+	bool win;
+
+	LabData( Uint8 w, Uint8 h ) :
+		width(w), height(h),
+		symbuf(w,h)
+		{}
 	};
+
+
+bool
+InBounds( LabData& lab, int x, int y )
+	{
+	return 	x < lab.width  && x >= 0 &&
+			y < lab.height && y >= 0;
+	}
+
+
+Uint32
+PlaceRandomly( LabData& lab, int tile )
+	{
+	Uint32 ipos;
+	do ipos = rand() % (lab.width*lab.height);
+	while( lab.walls[ipos] == IsWall );
+	
+	lab.walls[ipos] = tile;
+	return ipos;
+	}
+
+
+void
+MovePlayer( LabData& lab, int dx, int dy )
+	{
+	int xnew = lab.xplayer + dx;
+	int ynew = lab.yplayer + dy;
+	Uint32 inew = xnew + ynew * lab.width;
+	Uint8& tile = lab.walls[ inew ]; 
+	if( InBounds( lab, xnew, ynew ) &&
+		 tile != IsWall )
+		{
+		lab.xplayer = xnew;
+		lab.yplayer = ynew;
+		}
+	if( tile == IsToken )
+		{
+		tile = IsPath;
+		lab.tokens.erase( 
+			remove( begin(lab.tokens), end(lab.tokens), inew ),
+			end(lab.tokens));
+		}
+	if( lab.door == 0 && lab.tokens.empty() )
+		lab.door = PlaceRandomly( lab, IsDoor );
+	if( inew == lab.door )
+		lab.win = true;
+	}
 
 
 void
 GenerateLabyrinth( LabData& lab )
 	{
-	Term::TTY tty( p_term->buffer );
 	size_t labSize = lab.width * lab.height;
 	lab.walls.resize( labSize, IsWall );
+	lab.door = 0;
+	lab.win = false;
 	std::vector<Uint32> path; // Stack for backtracking. 
 	int xstart = rand() % lab.width;
 	int ystart = rand() % lab.height;
 	xstart += xstart%2 ? 0 : 1;
 	ystart += ystart%2 ? 0 : 1; // Start on even coordinate.
 	path.push_back( xstart + ystart * lab.width );
+	lab.xplayer = xstart;
+	lab.yplayer = ystart;
 
 	do	{
 		int x = path.back() % lab.width; 
@@ -49,8 +109,7 @@ GenerateLabyrinth( LabData& lab )
 			xneighbor = x + dirs[d][0] * 2;
 			yneighbor = y + dirs[d][1] * 2;
 			ineighbor = xneighbor + yneighbor * lab.width;
-			if( xneighbor < lab.width  && xneighbor >= 0 &&
-				yneighbor < lab.height && yneighbor >= 0 &&
+			if( InBounds( lab, xneighbor, yneighbor ) &&
 				lab.walls[ineighbor] == IsWall )
 				{
 				pathFound = true;
@@ -72,39 +131,22 @@ GenerateLabyrinth( LabData& lab )
 			}
 		}
 	while( path.size() > 1 );
+
+	// And tokens randomly
+	for( size_t i=0; i < 10; ++i )
+		lab.tokens.push_back( PlaceRandomly( lab, IsToken ) );
 	}
 
 
-int
-main( int argc, char* argv[] )
+void
+MakePrettySymbols( LabData& lab )
 	{
-	LabData lab{ 51, 51 };
+	Term::TTY tty( lab.symbuf );
 
-	// Setup SDL related stuff
-	SDL_Init( SDL_INIT_VIDEO );
-	atexit( SDL_Quit );
-	atexit( IMG_Quit );
-
-	Term::SDL::Context term( lab.width, lab.height );
-	p_term = &term;
-	term.SetTilemap( "tileset.png" );
-	screen = SDL_SetVideoMode(
-		term.buffer.Width() * term.GetTileWidth(),
-		term.buffer.Height() * term.GetTileHeight(),
-		32, SDL_SWSURFACE );
-	term.SetRenderTarget( screen );
-
-	Term::TTY tty( term.buffer );
-	tty.PlaceCursor( 4, lab.height/2 );
-	tty.Put( "Generating labyrinth.." );
-	term.Print();
-	SDL_Flip(screen);
-
-	GenerateLabyrinth( lab );
 	for( size_t y=0; y < lab.height; ++y )
 	for( size_t x=0; x < lab.width; ++x )
 		{
-		if( lab.walls[ x + y * lab.width ] == IsPath ) 
+		if( lab.walls[ x + y * lab.width ] != IsWall ) 
 			{
 			tty.PlaceCursor(x,y);
 			tty.Put( 176 );
@@ -116,8 +158,7 @@ main( int argc, char* argv[] )
 			{
 			int xneighbor = x + dirs[d][0];
 			int yneighbor = y + dirs[d][1];
-			if( xneighbor < lab.width  && xneighbor >= 0 &&
-				yneighbor < lab.height && yneighbor >= 0 &&
+			if( InBounds( lab, xneighbor, yneighbor ) &&
 				lab.walls[ xneighbor + yneighbor*lab.width ] == IsWall )
 				neighbors |= dirs[d][2]; // add bit
 			}
@@ -152,8 +193,40 @@ main( int argc, char* argv[] )
 		tty.PlaceCursor(x,y);
 		tty.Put( c );
 		}
+	}
 
 
+int
+main( int argc, char* argv[] )
+	{
+	srand(2);
+	LabData lab( 31, 31 );
+
+	// Setup SDL related stuff
+	SDL_Init( SDL_INIT_VIDEO );
+	atexit( SDL_Quit );
+	atexit( IMG_Quit );
+
+	size_t hwin = 17;
+	size_t wwin = 16;
+	Term::SDL::Context term( wwin, hwin );
+	term.SetTilemap( "tileset.png" );
+	screen = SDL_SetVideoMode(
+		term.buffer.Width() * term.GetTileWidth(),
+		term.buffer.Height() * term.GetTileHeight(),
+		32, SDL_SWSURFACE );
+	term.SetRenderTarget( screen );
+	SDL_EnableKeyRepeat( 100, 100 ); // Basically the movementspeed of the player.
+
+	Term::TTY tty( term.buffer );
+	tty.PlaceCursor( 4, lab.height/2 );
+	tty.Put( "Generating labyrinth.." );
+	term.Print();
+	SDL_Flip(screen);
+
+	GenerateLabyrinth( lab );
+	MakePrettySymbols( lab );
+	term.buffer.Copy( lab.symbuf );
 	term.Print();
 	SDL_Flip(screen);
 
@@ -169,7 +242,66 @@ main( int argc, char* argv[] )
 				{
 				case SDLK_ESCAPE:
 					running = false; break;
+				case SDLK_UP:
+					MovePlayer( lab, 0, -1 ); break;
+				case SDLK_DOWN:
+					MovePlayer( lab, 0, 1 ); break;
+				case SDLK_LEFT:
+					MovePlayer( lab, -1, 0 ); break;
+				case SDLK_RIGHT:
+					MovePlayer( lab, 1, 0 ); break;
 				} break;
 			}
+		if( lab.win )
+			{
+			std::string winstr( "!!!WIN!!!" );
+			int x = rand() % (term.buffer.Width()+winstr.length()) - winstr.length();
+			int y = rand() % (term.buffer.Height()+winstr.length()) - winstr.length();
+			tty.PlaceCursor( x,y );
+			tty.SetPriColor( {
+				static_cast<Term::Color::component_t>( rand() % 255 ),
+				static_cast<Term::Color::component_t>( rand() % 255 ),
+				static_cast<Term::Color::component_t>( rand() % 255 ) });
+			tty.SetSecColor( {
+				static_cast<Term::Color::component_t>( rand() % 255 ),
+				static_cast<Term::Color::component_t>( rand() % 255 ),
+				static_cast<Term::Color::component_t>( rand() % 255 ) });
+			tty.Put( winstr );
+			}
+		else
+			{
+			term.buffer.Clear();
+			term.buffer.Copy( lab.symbuf, 0, 1,
+				-(term.buffer.Width()/2) + lab.xplayer, 
+				-(term.buffer.Height()/2) + lab.yplayer, 
+				term.buffer.Width(), term.buffer.Height() );
+			tty.PlaceCursor( term.buffer.Width()/2, term.buffer.Height()/2+1 ); 
+			tty.Put( 1 );
+			for( auto itoken : lab.tokens )
+				{
+				tty.PlaceCursor( 
+					(itoken % lab.width) +(term.buffer.Width())/2 - lab.xplayer ,
+					(itoken / lab.width) +(term.buffer.Height()/2) - lab.yplayer +1 );
+				tty.Put( 9 );
+				}
+			tty.PlaceCursor( 0,0 );
+			if( lab.door == 0 )
+				{
+				tty.Put( "Tokens left: " );
+				std::stringstream ss; 
+				ss << lab.tokens.size();
+				tty.Put( ss.str() );
+				}
+			else
+				{
+				tty.Put( "Find the door!" );
+				tty.PlaceCursor( lab.door % lab.width + term.buffer.Width()/2 - lab.xplayer,
+					lab.door / lab.width + term.buffer.Height()/2 + 1 - lab.yplayer );
+				tty.Put( 239 );
+				}
+			}
+		term.Print();
+		SDL_Flip(screen);
+		SDL_Delay(50);
 		}
 	}
