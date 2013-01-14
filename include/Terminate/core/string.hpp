@@ -21,20 +21,20 @@ namespace Term
 
 		static bool eq( Char a, Char b )
 			{
-			return a.GetChar() == b.GetChar();
+			return a.ASCII() == b.ASCII();
 			}
 
 		static bool lt( Char a, Char b )
 			{
-			return a.GetChar() < b.GetChar();
+			return a.ASCII() < b.ASCII();
 			}
 
 		static bool compare( const Char* a, const Char* b, size_t n )
 			{
 			while( n-- != 0 )
 				{
-				if( a[n].GetChar() < b[n].GetChar() ) return -1;
-				if( a[n].GetChar() > b[n].GetChar() ) return 1;
+				if( a[n].ASCII() < b[n].ASCII() ) return -1;
+				if( a[n].ASCII() > b[n].ASCII() ) return 1;
 				++a; ++b;
 				}
 			return 0;
@@ -44,8 +44,8 @@ namespace Term
 	typedef std::basic_string<Char,Term_char_traits> String;
 
 	String MakeString( const std::string& );
-	void SetPriColor( String&, Color );
-	void SetSecColor( String&, Color );
+	void PriColor( String&, Color );
+	void SecColor( String&, Color );
 
 
 	} // namespace Term

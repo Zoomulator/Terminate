@@ -17,20 +17,20 @@ namespace Term
 	{
 
 	
-	class CharBuffer
+	class Buffer
 		{
 		public:
-			CharBuffer( size_t width, size_t height );
+			Buffer( size_t width, size_t height );
 			size_t Width() const;
 			size_t Height() const;
 			void Clear(); 
-			void SetClearChar( Char );
+			void ClearChar( Char );
 			void Put( size_t x, size_t y, Char );
 			Char Get( size_t x, size_t y ) const;
 			void Scroll( int rows, int cols=0);
-			void Copy( const CharBuffer&, int dx, int dy, 
+			void Copy( const Buffer&, int dx, int dy, 
 				int sx, int sy, size_t sw, size_t sh );
-			void Copy( const CharBuffer& );
+			void Copy( const Buffer& );
 
 		private:
 			size_t width, height;

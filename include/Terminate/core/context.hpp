@@ -9,7 +9,7 @@
 #define TERMINATE_CONTEXT_HPP
 
 #include <string>
-#include "charbuffer.hpp"
+#include "buffer.hpp"
 
 namespace Term
 	{
@@ -22,7 +22,7 @@ namespace Term
 	class Context
 		{
 		public:
-			CharBuffer buffer;
+			Buffer buffer;
 
 			Context( size_t width, size_t height ) : buffer(width,height) {}
 			virtual ~Context() {}

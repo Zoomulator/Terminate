@@ -33,12 +33,12 @@ namespace SDL
 		public:
 			Context( size_t width, size_t height );
 			~Context();
-			void SetRenderTarget( SDL_Surface* );
+			void RenderTarget( SDL_Surface* );
 
-			void SetTilemap( std::string path );
-			SDL_Surface* GetTilemap();
-			PixDim GetTileWidth() const;
-			PixDim GetTileHeight() const;
+			void Tilemap( std::string path );
+			SDL_Surface* Tilemap();
+			PixDim TileWidth() const;
+			PixDim TileHeight() const;
 			virtual void Print( Char ch, size_t x, size_t y ) const override;
 			virtual void Print() const override;
 

@@ -34,14 +34,14 @@ namespace SDL
 
 
 	void
-	Context::SetRenderTarget( SDL_Surface* surf )
+	Context::RenderTarget( SDL_Surface* surf )
 		{
 		drawSurf = surf;
 		}
 
 
 	void
-	Context::SetTilemap( std::string path )
+	Context::Tilemap( std::string path )
 		{
 		SDL_Surface* newTilemap = IMG_Load( path.c_str() );
 		if( newTilemap == nullptr )
@@ -58,21 +58,21 @@ namespace SDL
 
 
 	SDL_Surface*
-	Context::GetTilemap()
+	Context::Tilemap()
 		{
 		return tilemap;
 		}
 
 
 	PixDim
-	Context::GetTileWidth() const
+	Context::TileWidth() const
 		{
 		return twidth;
 		}
 
 
 	PixDim
-	Context::GetTileHeight() const
+	Context::TileHeight() const
 		{
 		return theight;
 		}
@@ -82,22 +82,24 @@ namespace SDL
 	Context::Print( Char ch, size_t x, size_t y ) const
 		{
 		SDL_Color colors[2] = {
-			toSDLColor( ch.GetPriColor() ),
-			toSDLColor( ch.GetSecColor() ) };
+			toSDLColor( ch.PriColor() ),
+			toSDLColor( ch.SecColor() ) };
 		if( SDL_SetColors( tilemap, colors, 0, 2 ) == 0 )
 			throw std::runtime_error(
 				"Tilemap missing palette." );
 
-		Sint16 tilex = (ch.GetChar() % 16) * GetTileWidth();
-		Sint16 tiley = (ch.GetChar() / 16) * GetTileHeight();
+		// Convert the ASCII value to tilemap coordinates.
+		Sint16 tilex = (ch.ASCII() % 16) * TileWidth();
+		Sint16 tiley = (ch.ASCII() / 16) * TileHeight();
 		SDL_Rect tile = { 
 			tilex, tiley,
-			static_cast<Uint16>(GetTileWidth()),
-			static_cast<Uint16>(GetTileHeight() )};
+			static_cast<Uint16>(TileWidth()),
+			static_cast<Uint16>(TileHeight())};
 		SDL_Rect dst = {
-			static_cast<Sint16>(x * GetTileWidth()),
-			static_cast<Sint16>(y * GetTileHeight()),
+			static_cast<Sint16>(x * TileWidth()),
+			static_cast<Sint16>(y * TileHeight()),
 			0,0 };
+
 		SDL_BlitSurface( tilemap, &tile, drawSurf, &dst );
 		}
 

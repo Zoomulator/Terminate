@@ -6,40 +6,41 @@
 #include <Terminate/sdl/context.hpp>
 
 
-SDL_Surface* screen;
-
-void RandomColors( Term::String& str )
+Term::Color
+RandomColor()
 	{
-	for( Term::Char& ch : str )
-		{
-		ch.SetPriColor( { 
-			static_cast<Uint8>(rand()%255),
-			static_cast<Uint8>(rand()%255),
-			static_cast<Uint8>(rand()%255) } );
-		ch.SetSecColor( {
-			static_cast<Uint8>(rand()%255),
-			static_cast<Uint8>(rand()%255),
-			static_cast<Uint8>(rand()%255) } );
-		}
+	return Term::Color (
+		static_cast<Uint8>(rand()%255),
+		static_cast<Uint8>(rand()%255),
+		static_cast<Uint8>(rand()%255) );
 	}
 
 
-int main( int argc, char* argv[] )
+void
+RandomColors( Term::String& str )
+	{
+	for( Term::Char& ch : str )
+		ch.PriColor( Term::Color::Black ).SecColor( RandomColor() );
+	}
+
+
+int
+main( int argc, char* argv[] )
 	{
 	SDL_Init( SDL_INIT_VIDEO );
 	atexit(SDL_Quit);
 	atexit(IMG_Quit);
 
-	Term::SDL::Context term( 20, 15 );
-	term.SetTilemap( "tileset.png" );
+	Term::SDL::Context term( 48, 15 );
+	term.Tilemap( "tileset.png" );
 	term.buffer.Clear();
 	Term::TTY tty( term.buffer );
 
-	screen = SDL_SetVideoMode( 
-		term.buffer.Width() * term.GetTileWidth(),
-		term.buffer.Height() * term.GetTileHeight(),
+	SDL_Surface* screen = SDL_SetVideoMode( 
+		term.buffer.Width()  * term.TileWidth(),
+		term.buffer.Height() * term.TileHeight(),
 		32, SDL_SWSURFACE );
-	term.SetRenderTarget( screen );
+	term.RenderTarget( screen );
 
 	Term::String hello = Term::MakeString("Hello, terminal!");
 	Term::String wrapStr = Term::MakeString( "Wraaaaaaaap" );
@@ -54,26 +55,18 @@ int main( int argc, char* argv[] )
 		SDL_Flip(screen);
 		SDL_Delay(50);
 		}
-	tty.Set( Term::TTY::Wrap );
-	tty.SetPriColor( { 255,200,0 } );
-	tty.SetSecColor( { 0,0,0 } );
-	tty.PlaceCursor( 15, 7 );
-	tty.Put(wrapStr);
-	tty.PlaceCursor( 0, 3 );
-	tty.Put( "Done!" );
-	tty.PlaceCursor( 6, 10 );
-	tty.Put( newLineStr );
-	tty.PlaceCursor( 0, 11 );
-	tty.Put( "This  Term" );
-	tty.Set( Term::TTY::Insert );
-	tty.PlaceCursor( 5, 11 );
-	tty.Put( "is" );
+
+	using Term::TTY;
+	tty.Set( TTY::Wrap ).PriColor( Term::Color(255,200,0) ).SecColor( Term::Color(0,0,0) );
+	tty.Place( 15,7 ).Put( wrapStr );
+	tty.Place( 0, 3 ).Put( "Done!" );
+	tty.Place( 6,10 ).Put( newLineStr );
+	tty.Place( 0,11 ).Put( "Insert between angles ><" );
+	tty.Set( TTY::Insert ).Place( 23, 11 ).Put( "!inserted!" );
 	std::stringstream ss;
 	ss << "Char size: " << sizeof(Term::Char);
-	tty.PlaceCursor( 0, 14 );
-	tty.Put( ss.str() );
-
-	tty.PlaceCursor(0,2);
+	tty.Place( 0,14 ).Put( ss.str() );
+	tty.Place(0,2);
 	for( int i=0; i < 20; ++i )
 		tty.Put( (char) i+127 );	
 

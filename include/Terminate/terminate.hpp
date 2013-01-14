@@ -8,7 +8,7 @@
 #ifndef TERMINATE_TERMINATE_HPP
 #define TERMINATE_TERMINATE_HPP
 
-#include "core/charbuffer.hpp"
+#include "core/buffer.hpp"
 #include "core/char.hpp"
 #include "core/context.hpp"
 #include "core/string.hpp"

@@ -20,7 +20,7 @@ LabData
 	typedef std::vector<Uint8> WallData;
 	typedef std::vector<Uint32> TokenData;
 	Uint8 width, height;
-	Term::CharBuffer symbuf;
+	Term::Buffer symbuf;
 	WallData walls;
 	TokenData tokens;
 	size_t xplayer, yplayer;
@@ -32,6 +32,16 @@ LabData
 		symbuf(w,h)
 		{}
 	};
+
+
+Term::Color
+RandomColor()
+	{
+	return Term::Color(
+		static_cast<Term::Color::component_t>( rand() % 255 ),
+		static_cast<Term::Color::component_t>( rand() % 255 ),
+		static_cast<Term::Color::component_t>( rand() % 255 ) );
+	}
 
 
 Uint32
@@ -137,8 +147,8 @@ GenerateLabyrinth( LabData& lab )
 	lab.walls.resize( labSize, IsWall );
 	lab.door = 0;
 	lab.win = false;
-	int xstart = rand() % lab.width;
-	int ystart = rand() % lab.height;
+	int xstart = rand() % (lab.width-1);
+	int ystart = rand() % (lab.height-1);
 	xstart += xstart%2 ? 0 : 1;
 	ystart += ystart%2 ? 0 : 1; // Start on even coordinate.
 	lab.xplayer = xstart;
@@ -210,13 +220,11 @@ MakePrettySymbols( LabData& lab )
 		int itile = x + y*lab.width;
 		if( lab.walls[ itile ] != IsWall ) 
 			{
-			tty.PlaceCursor(x,y);
-			tty.Put( 176 );
+			tty.Place(x,y).Put( 176 );
 			continue;
 			}
 		
-		tty.PlaceCursor(x,y);
-		tty.Put( WallSymbol(lab, itile) );
+		tty.Place(x,y).Put( WallSymbol(lab, itile) );
 		}
 	}
 
@@ -235,16 +243,16 @@ main( int argc, char* argv[] )
 	size_t hwin = 17;
 	size_t wwin = 16;
 	Term::SDL::Context term( wwin, hwin );
-	term.SetTilemap( "tileset.png" );
+	term.Tilemap( "tileset.png" );
 	SDL_Surface* screen = SDL_SetVideoMode(
-		term.buffer.Width() * term.GetTileWidth(),
-		term.buffer.Height() * term.GetTileHeight(),
+		term.buffer.Width() * term.TileWidth(),
+		term.buffer.Height() * term.TileHeight(),
 		32, SDL_SWSURFACE );
-	term.SetRenderTarget( screen );
+	term.RenderTarget( screen );
 	Term::Char clearChar('\0');
-	clearChar.SetPriColor( {0,0,0});
-	clearChar.SetSecColor( {0,0,0});
-	term.buffer.SetClearChar( clearChar ); 
+	clearChar.PriColor( Term::Color::Black );
+	clearChar.SecColor( Term::Color::Black ); 
+	term.buffer.ClearChar( clearChar ); 
 	SDL_EnableKeyRepeat( 100, 100 ); // Basically the movementspeed of the player.
 
 	Term::TTY tty( term.buffer );
@@ -281,16 +289,9 @@ main( int argc, char* argv[] )
 			std::string winstr( "!!!WIN!!!" );
 			int x = rand() % (term.buffer.Width()+winstr.length()) - winstr.length();
 			int y = rand() % (term.buffer.Height()+winstr.length()) - winstr.length();
-			tty.PlaceCursor( x,y );
-			tty.SetPriColor( {
-				static_cast<Term::Color::component_t>( rand() % 255 ),
-				static_cast<Term::Color::component_t>( rand() % 255 ),
-				static_cast<Term::Color::component_t>( rand() % 255 ) });
-			tty.SetSecColor( {
-				static_cast<Term::Color::component_t>( rand() % 255 ),
-				static_cast<Term::Color::component_t>( rand() % 255 ),
-				static_cast<Term::Color::component_t>( rand() % 255 ) });
-			tty.Put( winstr );
+			tty.PriColor( RandomColor() );
+			tty.SecColor( RandomColor() );
+			tty.Place(x,y).Put( winstr );
 			}
 		else
 			{
@@ -299,20 +300,18 @@ main( int argc, char* argv[] )
 				-(term.buffer.Width()/2) + lab.xplayer, 
 				-(term.buffer.Height()/2) + lab.yplayer, 
 				term.buffer.Width(), term.buffer.Height() );
-			tty.PlaceCursor( term.buffer.Width()/2, term.buffer.Height()/2+1 ); 
-			tty.SetPriColor( {255,255,255} );
-			tty.SetSecColor( {0,0,0} );
+			tty.Place( term.buffer.Width()/2, term.buffer.Height()/2+1 ); 
+			tty.PriColor( Term::Color::White );
+			tty.SecColor( Term::Color::Black );
 			tty.Put( 1 );
 			for( auto itoken : lab.tokens )
 				{
-				tty.PlaceCursor( 
+				tty.Place( 
 					(itoken % lab.width) +(term.buffer.Width())/2 - lab.xplayer ,
 					(itoken / lab.width) +(term.buffer.Height()/2) - lab.yplayer +1 );
 				tty.Put( 9 );
 				}
-			tty.PlaceCursor( 0,0 );
-			tty.SetPriColor( {0,0,0} );
-			tty.SetSecColor( {255,255,255} );
+			tty.Place(0,0).PriColor( Term::Color::Black ).SecColor( Term::Color::White );
 			if( lab.door == 0 )
 				{
 				tty.Put( "Tokens left: " );
@@ -323,7 +322,8 @@ main( int argc, char* argv[] )
 			else
 				{
 				tty.Put( "Find the door!" );
-				tty.PlaceCursor( lab.door % lab.width + term.buffer.Width()/2 - lab.xplayer,
+				tty.Place(
+					lab.door % lab.width + term.buffer.Width()/2 - lab.xplayer,
 					lab.door / lab.width + term.buffer.Height()/2 + 1 - lab.yplayer );
 				tty.Put( 239 );
 				}

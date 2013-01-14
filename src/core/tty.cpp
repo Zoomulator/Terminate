@@ -13,22 +13,23 @@ namespace Term
 	{
 	
 
-	TTY::TTY( CharBuffer& buf ) :
+	TTY::TTY( Buffer& buf ) :
 		buffer(&buf),
 		curs_x(0), curs_y(0),
 		state(0),
-		pri{ 255,255,255 },
-		sec{ 0,0,0 }
+		pri( 255,255,255 ),
+		sec( 0,0,0 )
 		{}
 
 
-	void
+	TTY&
 	TTY::Set( StateBit b, bool setTo )
 		{
 		if( setTo )
 			state |= b;
 		else
 			state ^= b;
+		return *this;
 		}
 
 
@@ -39,8 +40,8 @@ namespace Term
 		}
 
 
-	void
-	TTY::PlaceCursor( size_t x, size_t y )
+	TTY&
+	TTY::Place( size_t x, size_t y )
 		{
 		if( IsSet(Wrap) && x >= buffer->Width() )
 			{
@@ -55,92 +56,96 @@ namespace Term
 			}
 		curs_x = x;
 		curs_y = y;
+		return *this;
 		}
 
 
-	void
+	TTY&
 	TTY::ClearLine()
 		{
 		for( size_t x=0; x<buffer->Width(); ++x )
 			buffer->Put(x,curs_y, Char() );
 
-		PlaceCursor(0,curs_y);
+		Place(0,curs_y);
+		return *this;
 		}
 
 
 	Char
-	TTY::Get() const
+	TTY::Peek() const
 		{
 		return buffer->Get(curs_x,curs_y);
 		}
 
 
-	void
+	TTY&
 	TTY::Put( Char ch )
 		{
 		if( IsSet(Insert) &&
-			Get().GetChar() != '\0' )
+			Peek().ASCII() != '\0' )
 			{
 			TTY insert(*buffer);
-			insert.PlaceCursor(curs_x+1, curs_y);
-			Char next = Get();
+			insert.Place(curs_x+1, curs_y);
+			Char next = Peek();
 			do  {
-				Char tmp = insert.Get();
+				Char tmp = insert.Peek();
 				insert.Put(next);
 				next = tmp;
 				}
-			while( next.GetChar() != '\0' );
+			while( next.ASCII() != '\0' );
 			}
 
-		if( ch.GetChar() == '\n' )
-			PlaceCursor( 0, curs_y + 1 );
+		if( ch.ASCII() == '\n' )
+			Place( 0, curs_y + 1 );
 		else
 			{
 			buffer->Put( curs_x, curs_y, ch );
-			PlaceCursor( curs_x + 1, curs_y );
+			Place( curs_x + 1, curs_y );
 			}
+		return *this;
 		}
 
 
-	void
+	TTY&
 	TTY::Put( const String& str )
 		{
 		for( Char ch : str )
 			Put(ch);
+		return *this;
 		}
 
 
 
-	void
+	TTY&
 	TTY::Put( char c )
 		{
-		Char ch;
-		ch.SetChar(c);
-		ch.SetPriColor(pri);
-		ch.SetSecColor(sec);
-		Put(ch);
+		Put( Char(c,0,pri,sec) );
+		return *this;
 		}
 
 
-	void
+	TTY&
 	TTY::Put( const std::string& str )
 		{
 		for( auto c : str )
 			Put(c);
+		return *this;
 		}
 
 
-	void
-	TTY::SetPriColor( Color color )
+	TTY&
+	TTY::PriColor( Color color )
 		{
 		pri = color;
+		return *this;
 		}
 
 
-	void
-	TTY::SetSecColor( Color color )
+	TTY&
+	TTY::SecColor( Color color )
 		{
 		sec = color;
+		return *this;
 		}
 
 

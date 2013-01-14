@@ -11,6 +11,9 @@
 namespace Term
 	{
 
+	Color Color::Black( 0,0,0 );
+	Color Color::White( 255,255,255 );
+
 
 	Char::Char( char_t c_, uint8_t pal,
 		Color pri, Color sec) :
@@ -24,48 +27,51 @@ namespace Term
 	Char::Char( char_t c_, uint8_t pal ) :
 		c(c_),
 		pal_i(pal),
-		priColor{255,255,255},
-		secColor{0,0,0}
+		priColor( Color::Black ),
+		secColor( Color::White )
 		{}
 
 
 	Char::char_t
-	Char::GetChar() const
+	Char::ASCII() const
 		{
 		return c;
 		}
 
 
-	void
-	Char::SetChar( char_t newC )
+	Char&
+	Char::ASCII( char_t newC )
 		{
 		c = newC;
+		return *this;
 		}
 
 
-	void
-	Char::SetPriColor( Color newCol )
+	Char&
+	Char::PriColor( Color newCol )
 		{
 		priColor = newCol;
+		return *this;
 		}
 
 
 	Color
-	Char::GetPriColor() const
+	Char::PriColor() const
 		{
 		return priColor;
 		}
 
 
-	void
-	Char::SetSecColor( Color newCol )
+	Char&
+	Char::SecColor( Color newCol )
 		{
 		secColor = newCol;
+		return *this;
 		}
 
 
 	Color
-	Char::GetSecColor() const
+	Char::SecColor() const
 		{
 		return secColor;
 		}

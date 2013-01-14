@@ -22,8 +22,8 @@ if( UseSDL )
 
 		set_target_properties( TerminateSDL TerminateSDL_static
 			PROPERTIES
-			 SOVERSION 0
-			 VERSIO 1.0.0
+			 SOVERSION 1
+			 VERSIO 1.1.0
 			)
 
 		install( TARGETS TerminateSDL TerminateSDL_static

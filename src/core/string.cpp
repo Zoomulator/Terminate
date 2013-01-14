@@ -18,7 +18,7 @@ namespace Term
 		Char ch;
 		for( auto c : str )
 			{
-			ch.SetChar(c);
+			ch.ASCII(c);
 			termstr.push_back( ch );
 			}
 		return termstr;
@@ -26,18 +26,18 @@ namespace Term
 
 
 	void
-	SetPriColor( String& str, Color color )
+	PriColor( String& str, Color color )
 		{
 		for( auto& ch : str )
-			ch.SetPriColor( color );
+			ch.PriColor( color );
 		}
 
 
 	void
-	SetSecColor( String& str, Color color )
+	SecColor( String& str, Color color )
 		{
 		for( auto& ch : str )
-			ch.SetSecColor( color );
+			ch.SecColor( color );
 		}
 
 

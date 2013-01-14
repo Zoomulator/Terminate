@@ -5,23 +5,26 @@
 #include <Terminate/sdl/context.hpp>
 
 
-void RandomColors( Term::String& str )
+Term::Color
+RandomColor()
 	{
-	for( Term::Char& ch : str )
-		{
-		ch.SetPriColor( { 
-			static_cast<Uint8>(rand()%255),
-			static_cast<Uint8>(rand()%255),
-			static_cast<Uint8>(rand()%255) } );
-		ch.SetSecColor( {
-			static_cast<Uint8>(rand()%255),
-			static_cast<Uint8>(rand()%255),
-			static_cast<Uint8>(rand()%255) } );
-		}
+	return Term::Color (
+		static_cast<Uint8>(rand()%255),
+		static_cast<Uint8>(rand()%255),
+		static_cast<Uint8>(rand()%255) );
 	}
 
 
-int main( int argc, char* argv[] )
+void
+RandomColors( Term::String& str )
+	{
+	for( Term::Char& ch : str )
+		ch.PriColor( Term::Color::Black ).SecColor( RandomColor() );
+	}
+
+
+int
+main( int argc, char* argv[] )
 	{
 	// Setup SDL and our terminal buffer.
 	SDL_Init( SDL_INIT_VIDEO );
@@ -29,17 +32,17 @@ int main( int argc, char* argv[] )
 	atexit( SDL_Quit );
 	atexit( IMG_Quit );
 	Term::SDL::Context term( 20, 3 );
-	term.SetTilemap( "tileset.png" );
+	term.Tilemap( "tileset.png" );
 
 	SDL_Surface* screen = SDL_SetVideoMode(
-		term.buffer.Width() * term.GetTileWidth(),
-		term.buffer.Height() * term.GetTileHeight(),
+		term.buffer.Width()  * term.TileWidth(),
+		term.buffer.Height() * term.TileHeight(),
 		32, SDL_SWSURFACE );
-	term.SetRenderTarget(screen);
+	term.RenderTarget(screen);
 
 	// Prepare the marquee!
 	Term::String bannerText = Term::MakeString( "Terminate Terminal emulator running SDL" );
-	Term::CharBuffer banner( bannerText.length(), 1 );
+	Term::Buffer banner( bannerText.length(), 1 );
 	Term::TTY tty(banner);
 		
 	// Offset used to make the text move.
@@ -56,7 +59,7 @@ int main( int argc, char* argv[] )
 			}
 
 		// Print some utterly unreadable randomly colored text.
-		tty.PlaceCursor( 0, 0 );
+		tty.Place( 0, 0 );
 		RandomColors(bannerText);
 		tty.Put( bannerText );
 		term.buffer.Clear();

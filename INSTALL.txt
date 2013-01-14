@@ -29,8 +29,7 @@ terminate/build/$ cmake ../ [options]
 terminate/build/$ make
 terminate/build/$ make install
 
-Some systems require 'sudo' for the last step even
-though it targets the /usr/local folder.
+Some systems require 'sudo' for the last step. 
 
 
 1.3 Cmake osX
@@ -52,3 +51,4 @@ specific options:
 -DBuildDemos=OFF # Don't build the demos :(
 -DLLVMcxx=ON     # Link LLVM's libc++ as standard library. -stdlib=libc++
 
+Make sure to configure CMake in a clean directory.

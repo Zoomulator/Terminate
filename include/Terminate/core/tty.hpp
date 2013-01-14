@@ -8,7 +8,7 @@
 #ifndef TERMINATE_TTY_HPP
 #define TERMINATE_TTY_HPP
 
-#include "charbuffer.hpp"
+#include "buffer.hpp"
 #include "string.hpp"
 
 namespace Term
@@ -23,20 +23,20 @@ namespace Term
 				Insert = 2,
 				VScroll = 4
 				};
-			TTY( CharBuffer& );
-			void Set( StateBit b, bool setTo=true );
+			TTY( Buffer& );
+			TTY& Set( StateBit b, bool setTo=true );
 			bool IsSet( StateBit b ) const;
-			void PlaceCursor( size_t x, size_t y );
-			void ClearLine();
-			Char Get() const;
-			void Put( Char );
-			void Put( const String& );
-			void Put( char );
-			void Put( const std::string& );
-			void SetPriColor( Color );
-			void SetSecColor( Color );
+			Char Peek() const;
+			TTY& Place( size_t x, size_t y );
+			TTY& ClearLine();
+			TTY& Put( Char );
+			TTY& Put( const String& );
+			TTY& Put( char );
+			TTY& Put( const std::string& );
+			TTY& PriColor( Color );
+			TTY& SecColor( Color );
 		private:
-			CharBuffer* buffer;
+			Buffer* buffer;
 			int curs_x, curs_y;
 			StateBit state;
 			Color pri,sec;

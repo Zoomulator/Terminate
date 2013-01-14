@@ -5,7 +5,7 @@
 // for more information.
 /////////////////////////////////////////////
 
-#include "charbuffer.hpp"
+#include "buffer.hpp"
 #include <stdexcept>
 #include <algorithm>
 
@@ -16,7 +16,7 @@ namespace Term
 	{
 
 
-	CharBuffer::CharBuffer( size_t w, size_t h ) :
+	Buffer::Buffer( size_t w, size_t h ) :
 		width(w), height(h),
 		clearChar( '\0' ),
 		buffer( new Char[w*h] )
@@ -24,21 +24,21 @@ namespace Term
 
 
 	size_t
-	CharBuffer::Width() const
+	Buffer::Width() const
 		{
 		return width;
 		}
 
 
 	size_t
-	CharBuffer::Height() const
+	Buffer::Height() const
 		{
 		return height;
 		}
 
 
 	void
-	CharBuffer::Clear()
+	Buffer::Clear()
 		{
 		size_t size = width*height;
 		for(size_t i=0; i < size; ++i )
@@ -47,26 +47,26 @@ namespace Term
 
 
 	void
-	CharBuffer::SetClearChar( Char ch )
+	Buffer::ClearChar( Char ch )
 		{
 		clearChar = ch;
 		}
 
 
 	void
-	CharBuffer::Put( size_t x, size_t y, Char c )
+	Buffer::Put( size_t x, size_t y, Char c )
 		{
 		if( x >= width || y >= height )
 			return;
 		//	throw std::range_error( 
-		//		"CharBuffer::PutChar out of range." );
+		//		"Buffer::PutChar out of range." );
 
 		buffer[x+y*width] = c;
 		}
 
 
 	Char
-	CharBuffer::Get( size_t x, size_t y ) const
+	Buffer::Get( size_t x, size_t y ) const
 		{
 		if( x < width && y < height )
 			return buffer[x+y*width];
@@ -76,10 +76,10 @@ namespace Term
 
 
 	void
-	CharBuffer::Scroll( int rows, int cols )
+	Buffer::Scroll( int rows, int cols )
 		{
-		CharBuffer tmpBuf(Width(),Height());
-		tmpBuf.SetClearChar( clearChar );
+		Buffer tmpBuf(Width(),Height());
+		tmpBuf.ClearChar( clearChar );
 		tmpBuf.Clear();
 		tmpBuf.Copy( *this, -cols, -rows, 0,0, Width(), Height() );
 		*this = std::move(tmpBuf);
@@ -87,7 +87,7 @@ namespace Term
 
 
 	void
-	CharBuffer::Copy( const CharBuffer& other, int dx, int dy,
+	Buffer::Copy( const Buffer& other, int dx, int dy,
 		int sx, int sy, size_t sw, size_t sh )
 		{
 		sh = min( sh, other.Height() - sy );
@@ -101,7 +101,7 @@ namespace Term
 
 
 	void
-	CharBuffer::Copy( const CharBuffer& other )
+	Buffer::Copy( const Buffer& other )
 		{
 		Copy( other, 0,0, 0,0, min(Width(),other.Width()), min(Height(),other.Height()) );
 		}
