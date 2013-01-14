@@ -17,7 +17,8 @@ namespace Term
 
 	struct Color
 		{
-		uint8_t r,g,b;
+		typedef uint8_t component_t;
+		component_t r,g,b;
 		};
 
 	class Char
