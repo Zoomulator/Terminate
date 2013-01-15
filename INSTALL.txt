@@ -3,9 +3,8 @@ Notes on how to build and install Terminate from source
 
 1. CMake
 The default build system for Terminate is CMake.
-For those not familiar with it, it stands for
-Cross platform Make and you can find more info
-on www.cmake.org
+For those not familiar with it, it stands for Cross plat-
+form Make and you can find more info on www.cmake.org
 
 1.2 CMake Linux
 Most distros have CMake in their package installers.
@@ -30,25 +29,40 @@ terminate/build/$ make
 terminate/build/$ make install
 
 Some systems require 'sudo' for the last step.
-
+CMake will also set the install path of libraries to 
+/usr/local. Some linuxs doesn't have this path in the 
+system's search paths. 
+Either add /usr/local/lib/ to your systems search path, or
+set the CMAKE_INSTALL_PREFIX to the desired location when
+running CMake.
 
 1.3 Cmake osX
 The build and install should be equal to Linux
 
-However the GNU libstdc++ provided by osx may
-be out of date and thereby lacking certain C++11
-functionality. This typically manifests itself in
-failing to compile because <cstdint> is missing and
-there's no std::unique_ptr defined in <memory>.
-This can be solved by turning on the LLVMlibcxx
-option, causing clang to link to llvms c++ stdlib
-instead. See 2. buil options
+However the GNU libstdc++ provided by osx mayi be out of 
+date and thereby lacking certain C++11 functionality. This 
+typically manifests itself in failing to compile because 
+<cstdint> is missing and there's no std::unique_ptr defined
+in <memory>. 
+This can be solved by turning on the LLVMlibcxx option,
+causing clang to link to llvms c++ stdlib instead. 
+See section 2. build options
 
 2. CMake build options
-It's possible to give CMake the following project
-specific options:
--DUseSDL=OFF     # Disables installing SDL dependent components. Demos are disabled.
--DBuildDemos=OFF # Don't build the demos :(
--DLLVMcxx=ON     # Link LLVM's libc++ as standard library. -stdlib=libc++
+It's possible to give CMake the following
+project specific options:
+
+-DUseSDL=OFF                    # Disables installing SDL 
+                                # dependent components. 
+                                # Demos are disabled.
+
+-DBuildDemos=OFF                # Don't build the demos :(
+
+-DLLVMcxx=ON                    # Link LLVM's libc++ as 
+                                # standard library. 
+                                # -stdlib=libc++
+
+-DCMAKE_INSTALL_PREFIX=[path]   # Provide CMake with a dif- 
+                                # ferent install location.
 
 Make sure to configure CMake in a clean directory.
