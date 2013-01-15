@@ -16,7 +16,7 @@ A simple terminal emulator for typing characters to the
 a screen. It doesn't handle input, all it does is display
 output. Created with SDL in mind but allows easy
 integration with other systems/libraries by overloading
-the provided Context class. Ideal for colorful ASCII art, 
+the provided Context class. Ideal for colorful ASCII art,
 roguelikes and general nostalgia for the good ol day's
 with greenscreens and punchcards.
 
@@ -38,7 +38,7 @@ get onto Windows as well. PDCurses is that natural choice,
 but I found it icky. It's quite aged and isn't really
 capable of providing a truly cross compatible terminal for
 more advaced cursing. Unfortunately there were some dependency
-issues with their SDL port PDCurses on some linuxes which 
+issues with their SDL port PDCurses on some linuxes which
 finally made me decide to roll my own terminal-ish library.
 
 5. And the name?

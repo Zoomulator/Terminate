@@ -1,7 +1,7 @@
 /////////////////////////////////////////////
 // Copyright (c) 2013 Kim Simmons
 // Distributed under the Zlib/libPNG license.
-// Read LICENSE.txt accompanying this source 
+// Read LICENSE.txt accompanying this source
 // for more information.
 /////////////////////////////////////////////
 
@@ -9,72 +9,72 @@
 
 
 namespace Term
-	{
+    {
 
-	Color Color::Black( 0,0,0 );
-	Color Color::White( 255,255,255 );
-
-
-	Char::Char( char_t c_, uint8_t pal,
-		Color pri, Color sec) :
-		c(c_),
-		pal_i(pal),
-		priColor(pri),
-		secColor(sec)
-		{}
+    Color Color::Black( 0,0,0 );
+    Color Color::White( 255,255,255 );
 
 
-	Char::Char( char_t c_, uint8_t pal ) :
-		c(c_),
-		pal_i(pal),
-		priColor( Color::Black ),
-		secColor( Color::White )
-		{}
+    Char::Char( char_t c_, uint8_t pal,
+        Color pri, Color sec) :
+        c(c_),
+        pal_i(pal),
+        priColor(pri),
+        secColor(sec)
+        {}
 
 
-	Char::char_t
-	Char::ASCII() const
-		{
-		return c;
-		}
+    Char::Char( char_t c_, uint8_t pal ) :
+        c(c_),
+        pal_i(pal),
+        priColor( Color::Black ),
+        secColor( Color::White )
+        {}
 
 
-	Char&
-	Char::ASCII( char_t newC )
-		{
-		c = newC;
-		return *this;
-		}
+    Char::char_t
+    Char::ASCII() const
+        {
+        return c;
+        }
 
 
-	Char&
-	Char::PriColor( Color newCol )
-		{
-		priColor = newCol;
-		return *this;
-		}
+    Char&
+    Char::ASCII( char_t newC )
+        {
+        c = newC;
+        return *this;
+        }
 
 
-	Color
-	Char::PriColor() const
-		{
-		return priColor;
-		}
+    Char&
+    Char::PriColor( Color newCol )
+        {
+        priColor = newCol;
+        return *this;
+        }
 
 
-	Char&
-	Char::SecColor( Color newCol )
-		{
-		secColor = newCol;
-		return *this;
-		}
+    Color
+    Char::PriColor() const
+        {
+        return priColor;
+        }
 
 
-	Color
-	Char::SecColor() const
-		{
-		return secColor;
-		}
+    Char&
+    Char::SecColor( Color newCol )
+        {
+        secColor = newCol;
+        return *this;
+        }
 
 
-	} // namespace Term
+    Color
+    Char::SecColor() const
+        {
+        return secColor;
+        }
+
+
+    } // namespace Term

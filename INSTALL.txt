@@ -10,14 +10,14 @@ on www.cmake.org
 1.2 CMake Linux
 Most distros have CMake in their package installers.
 Ubuntu:
-	#aptitude or apt-get
-	sudo aptitude install cmake
+    #aptitude or apt-get
+    sudo aptitude install cmake
 Fedora
-	sudo yum install cmake
+    sudo yum install cmake
 
 Make sure that SDL1.2-dev is installed
-	aptitude search libsdl1.2-dev
-	aptitude search libsdl-image1.2-dev
+    aptitude search libsdl1.2-dev
+    aptitude search libsdl-image1.2-dev
 
 
 See build options for installing without SDL
@@ -29,7 +29,7 @@ terminate/build/$ cmake ../ [options]
 terminate/build/$ make
 terminate/build/$ make install
 
-Some systems require 'sudo' for the last step. 
+Some systems require 'sudo' for the last step.
 
 
 1.3 Cmake osX

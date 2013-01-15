@@ -1,7 +1,7 @@
 /////////////////////////////////////////////
 // Copyright (c) 2013 Kim Simmons
 // Distributed under the Zlib/libPNG license.
-// Read LICENSE.txt accompanying this source 
+// Read LICENSE.txt accompanying this source
 // for more information.
 /////////////////////////////////////////////
 
@@ -13,42 +13,42 @@
 
 
 namespace Term
-	{
+    {
 namespace SDL
-	{
+    {
 
-	inline
-	SDL_Color toSDLColor( const Color& c )
-		{
-		SDL_Color sdl;
-		sdl.r = c.r;
-		sdl.g = c.g;
-		sdl.b = c.b;
-		return sdl;
-	}
-
-
-	class Context : public Term::Context
-		{
-		public:
-			Context( size_t width, size_t height );
-			~Context();
-			void RenderTarget( SDL_Surface* );
-
-			void Tilemap( std::string path );
-			SDL_Surface* Tilemap();
-			PixDim TileWidth() const;
-			PixDim TileHeight() const;
-			virtual void Print( Char ch, size_t x, size_t y ) const override;
-			virtual void Print() const override;
-
-		private:
-			PixDim twidth,theight;
-			SDL_Surface* tilemap;
-			SDL_Surface* drawSurf;
-		};
+    inline
+    SDL_Color toSDLColor( const Color& c )
+        {
+        SDL_Color sdl;
+        sdl.r = c.r;
+        sdl.g = c.g;
+        sdl.b = c.b;
+        return sdl;
+    }
 
 
-	} // namespace SDL
-	} // namespace Term
+    class Context : public Term::Context
+        {
+        public:
+            Context( size_t width, size_t height );
+            ~Context();
+            void RenderTarget( SDL_Surface* );
+
+            void Tilemap( std::string path );
+            SDL_Surface* Tilemap();
+            PixDim TileWidth() const;
+            PixDim TileHeight() const;
+            virtual void Print( Char ch, size_t x, size_t y ) const override;
+            virtual void Print() const override;
+
+        private:
+            PixDim twidth,theight;
+            SDL_Surface* tilemap;
+            SDL_Surface* drawSurf;
+        };
+
+
+    } // namespace SDL
+    } // namespace Term
 #endif //TERMINATE_SDLCONTEXT_HPP
