@@ -16,26 +16,37 @@
 namespace Term
     {
 
-
-    class Buffer
+    class
+    Buffer
         {
         public:
-            Buffer( size_t width, size_t height );
-            size_t Width() const;
-            size_t Height() const;
-            void Clear();
-            void ClearChar( Char );
-            void Put( size_t x, size_t y, Char );
-            Char Get( size_t x, size_t y ) const;
-            void Scroll( int rows, int cols=0);
-            void Copy( const Buffer&, int dx, int dy,
-                int sx, int sy, size_t sw, size_t sh );
-            void Copy( const Buffer& );
+            virtual size_t
+            Width() const = 0;
 
-        private:
-            size_t width, height;
-            Char clearChar;
-            std::unique_ptr<Char[]> buffer;
+            virtual size_t
+            Height() const = 0;
+
+            virtual Char
+            Get( size_t x, size_t y ) const = 0;
+
+            virtual void
+            Clear() = 0;
+
+            virtual void
+            ClearChar( Char ) = 0;
+
+            virtual void
+            Put( size_t x, size_t y, Char ) = 0;
+
+            virtual void
+            Scroll( int rows, int cols=0 ) = 0;
+
+            virtual void
+            Copy( const Buffer&, int dx, int dy,
+                int sx, int sy, size_t sw, size_t sh ) = 0;
+
+            virtual void
+            Copy( const Buffer& ) = 0;
         };
 
 

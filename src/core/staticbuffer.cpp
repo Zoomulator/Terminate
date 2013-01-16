@@ -5,7 +5,7 @@
 // for more information.
 /////////////////////////////////////////////
 
-#include "buffer.hpp"
+#include "staticbuffer.hpp"
 #include <stdexcept>
 #include <algorithm>
 
@@ -16,7 +16,7 @@ namespace Term
     {
 
 
-    Buffer::Buffer( size_t w, size_t h ) :
+    StaticBuffer::StaticBuffer( size_t w, size_t h ) :
         width(w), height(h),
         clearChar( '\0' ),
         buffer( new Char[w*h] )
@@ -24,21 +24,21 @@ namespace Term
 
 
     size_t
-    Buffer::Width() const
+    StaticBuffer::Width() const
         {
         return width;
         }
 
 
     size_t
-    Buffer::Height() const
+    StaticBuffer::Height() const
         {
         return height;
         }
 
 
     void
-    Buffer::Clear()
+    StaticBuffer::Clear()
         {
         size_t size = width*height;
         for(size_t i=0; i < size; ++i )
@@ -47,26 +47,26 @@ namespace Term
 
 
     void
-    Buffer::ClearChar( Char ch )
+    StaticBuffer::ClearChar( Char ch )
         {
         clearChar = ch;
         }
 
 
     void
-    Buffer::Put( size_t x, size_t y, Char c )
+    StaticBuffer::Put( size_t x, size_t y, Char c )
         {
         if( x >= width || y >= height )
             return;
         //    throw std::range_error(
-        //        "Buffer::PutChar out of range." );
+        //        "StaticBuffer::PutChar out of range." );
 
         buffer[x+y*width] = c;
         }
 
 
     Char
-    Buffer::Get( size_t x, size_t y ) const
+    StaticBuffer::Get( size_t x, size_t y ) const
         {
         if( x < width && y < height )
             return buffer[x+y*width];
@@ -76,9 +76,9 @@ namespace Term
 
 
     void
-    Buffer::Scroll( int rows, int cols )
+    StaticBuffer::Scroll( int rows, int cols )
         {
-        Buffer tmpBuf(Width(),Height());
+        StaticBuffer tmpBuf(Width(),Height());
         tmpBuf.ClearChar( clearChar );
         tmpBuf.Clear();
         tmpBuf.Copy( *this, -cols, -rows, 0,0, Width(), Height() );
@@ -87,23 +87,25 @@ namespace Term
 
 
     void
-    Buffer::Copy( const Buffer& other, int dx, int dy,
+    StaticBuffer::Copy( const Buffer& other, int dx, int dy,
         int sx, int sy, size_t sw, size_t sh )
         {
         sh = min( sh, other.Height() - sy );
         sw = min( sw, other.Width() - sx );
+
         for( size_t y=max(-sy,0); y < sh; ++y )
         for( size_t x=max(-sx,0); x < sw; ++x )
-            {
             Put( dx+x, dy+y, other.Get(sx+x,sy+y) );
-            }
         }
 
 
     void
-    Buffer::Copy( const Buffer& other )
+    StaticBuffer::Copy( const Buffer& other )
         {
-        Copy( other, 0,0, 0,0, min(Width(),other.Width()), min(Height(),other.Height()) );
+        Copy( other,
+            0,0,
+            0,0,
+            min(Width(),other.Width()), min(Height(),other.Height()) );
         }
 
     } // namespace Term

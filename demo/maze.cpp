@@ -20,15 +20,15 @@ main( int argc, char* argv[] )
     Term::SDL::Context term( 60, 30 );
     term.Tilemap( "tileset.png" );
     SDL_Surface* screen = SDL_SetVideoMode(
-        term.buffer.Width()  * term.TileWidth(),
-        term.buffer.Height() * term.TileHeight(),
+        term.Framebuffer().Width()  * term.TileWidth(),
+        term.Framebuffer().Height() * term.TileHeight(),
         32, SDL_SWSURFACE );
     term.RenderTarget( screen );
-    term.buffer.ClearChar( Term::Char('\0', 0, BGCOLOR, FONTCOLOR));
-    term.buffer.Clear();
+    term.Framebuffer().ClearChar( Term::Char('\0', 0, BGCOLOR, FONTCOLOR));
+    term.Framebuffer().Clear();
 
 
-    Term::TTY tty(term.buffer);
+    Term::TTY tty(term.Framebuffer());
     tty.Set( Term::TTY::VScroll );
     tty.Set( Term::TTY::Wrap );
     tty.PriColor( BGCOLOR );

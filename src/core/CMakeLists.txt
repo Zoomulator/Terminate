@@ -4,8 +4,8 @@ add_library( Terminate SHARED ${CORE_SOURCE_FILES} )
 add_library( Terminate_static STATIC ${CORE_SOURCE_FILES} )
 set_target_properties( Terminate Terminate_static
     PROPERTIES
-     SOVERSION 1
-     VERSION 1.1.0
+     SOVERSION 2
+     VERSION 1.2.0
     )
 
 install( TARGETS Terminate Terminate_static

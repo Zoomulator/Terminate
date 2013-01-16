@@ -13,8 +13,14 @@
 
 namespace Term
     {
-    typedef unsigned StateBit;
-    class TTY
+
+
+    typedef unsigned
+    StateBit;
+
+
+    class
+    TTY
         {
         public:
             enum : StateBit // State bitflags
@@ -23,23 +29,47 @@ namespace Term
                 Insert = 2,
                 VScroll = 4
                 };
+
             TTY( Buffer& );
-            TTY& Set( StateBit b, bool setTo=true );
-            bool IsSet( StateBit b ) const;
-            Char Peek() const;
-            TTY& Place( size_t x, size_t y );
-            TTY& ClearLine();
-            TTY& Put( Char );
-            TTY& Put( const String& );
-            TTY& Put( char );
-            TTY& Put( const std::string& );
-            TTY& PriColor( Color );
-            TTY& SecColor( Color );
+
+            bool
+            IsSet( StateBit b ) const;
+
+            Char
+            Peek() const;
+
+            TTY&
+            Set( StateBit b, bool setTo=true );
+
+            TTY&
+            Place( size_t x, size_t y );
+
+            TTY&
+            ClearLine();
+
+            TTY&
+            Put( Char );
+
+            TTY&
+            Put( const String& );
+
+            TTY&
+            Put( char );
+
+            TTY&
+            Put( const std::string& );
+
+            TTY&
+            PriColor( Color );
+
+            TTY&
+            SecColor( Color );
+
         private:
-            Buffer* buffer;
-            int curs_x, curs_y;
-            StateBit state;
-            Color pri,sec;
+            Buffer*     buffer;
+            int         curs_x, curs_y;
+            StateBit    state;
+            Color       pri, sec;
         };
 
     } // namespace Term

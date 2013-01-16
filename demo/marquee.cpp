@@ -35,18 +35,18 @@ main( int argc, char* argv[] )
     term.Tilemap( "tileset.png" );
 
     SDL_Surface* screen = SDL_SetVideoMode(
-        term.buffer.Width()  * term.TileWidth(),
-        term.buffer.Height() * term.TileHeight(),
+        term.Framebuffer().Width()  * term.TileWidth(),
+        term.Framebuffer().Height() * term.TileHeight(),
         32, SDL_SWSURFACE );
     term.RenderTarget(screen);
 
     // Prepare the marquee!
     Term::String bannerText = Term::MakeString( "Terminate Terminal emulator running SDL" );
-    Term::Buffer banner( bannerText.length(), 1 );
+    Term::StaticBuffer banner( bannerText.length(), 1 );
     Term::TTY tty(banner);
 
     // Offset used to make the text move.
-    int offset = term.buffer.Width();
+    int offset = term.Framebuffer().Width();
     bool running=true;
     while(running)
         {
@@ -62,13 +62,14 @@ main( int argc, char* argv[] )
         tty.Place( 0, 0 );
         RandomColors(bannerText);
         tty.Put( bannerText );
-        term.buffer.Clear();
-        term.buffer.Copy( banner, offset, 1, 0,0,banner.Width(),banner.Height() );
+        term.Framebuffer().Clear();
+        term.Framebuffer().Copy( banner, offset, 1,
+            0,0, banner.Width(), banner.Height() );
         term.Print();
         SDL_Flip(screen);
         SDL_Delay(50);
         // Move text and wrap around screen.
         if( --offset < -(int)banner.Width() )
-            offset = term.buffer.Width();
+            offset = term.Framebuffer().Width();
         }
     }

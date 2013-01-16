@@ -17,21 +17,21 @@ main( int argc, char* argv[] )
     Term::SDL::Context term( 60, 30 );
     term.Tilemap( "tileset.png" );
     SDL_Surface* screen = SDL_SetVideoMode(
-        term.buffer.Width()  * term.TileWidth(),
-        term.buffer.Height() * term.TileHeight(),
+        term.Framebuffer().Width()  * term.TileWidth(),
+        term.Framebuffer().Height() * term.TileHeight(),
         32, SDL_SWSURFACE );
     term.RenderTarget( screen );
-    term.buffer.ClearChar( Term::Char('\0').PriColor(BGCOLOR).SecColor(Term::Color::Black) );
-    term.buffer.Clear();
+    term.Framebuffer().ClearChar( Term::Char('\0').PriColor(BGCOLOR).SecColor(Term::Color::Black) );
+    term.Framebuffer().Clear();
 
 
     using Term::TTY;
-    TTY tty(term.buffer);
+    TTY tty(term.Framebuffer());
     tty.Set( TTY::VScroll ).PriColor( BGCOLOR ).SecColor( FONTCOLOR );
 
     if( argc != 2 )
         {
-        tty.Place( 4, term.buffer.Height()/2 );
+        tty.Place( 4, term.Framebuffer().Height()/2 );
         tty.Put( "Usage: Specify a textfile as a command line argument." );
         }
 

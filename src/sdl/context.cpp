@@ -18,10 +18,10 @@ namespace SDL
 
 
     Context::Context( size_t width, size_t height) :
-        Term::Context(width,height),
         twidth(0), theight(0),
         tilemap(nullptr),
-        drawSurf(nullptr)
+        drawSurf(nullptr),
+        buffer( width, height )
         {
         }
 
@@ -110,6 +110,13 @@ namespace SDL
         for( size_t y=0; y<buffer.Height(); ++y )
         for( size_t x=0; x<buffer.Width(); ++x )
             Print( buffer.Get(x,y), x, y );
+        }
+
+
+    Buffer&
+    Context::Framebuffer()
+        {
+        return buffer;
         }
 
 

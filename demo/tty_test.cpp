@@ -33,12 +33,12 @@ main( int argc, char* argv[] )
 
     Term::SDL::Context term( 48, 15 );
     term.Tilemap( "tileset.png" );
-    term.buffer.Clear();
-    Term::TTY tty( term.buffer );
+    term.Framebuffer().Clear();
+    Term::TTY tty( term.Framebuffer() );
 
     SDL_Surface* screen = SDL_SetVideoMode(
-        term.buffer.Width()  * term.TileWidth(),
-        term.buffer.Height() * term.TileHeight(),
+        term.Framebuffer().Width()  * term.TileWidth(),
+        term.Framebuffer().Height() * term.TileHeight(),
         32, SDL_SWSURFACE );
     term.RenderTarget( screen );
 

@@ -19,15 +19,22 @@ namespace Term
     typedef int PixDim;
 
 
+    /* Abstract base class for system specific functionality.
+    */
     class Context
         {
         public:
-            Buffer buffer;
+            virtual
+            ~Context() = default;
 
-            Context( size_t width, size_t height ) : buffer(width,height) {}
-            virtual ~Context() {}
-            virtual void Print() const = 0;
-            virtual void Print( Char ch, size_t x, size_t y ) const = 0;
+            virtual void
+            Print() const = 0;
+
+            virtual void
+            Print( Char ch, size_t x, size_t y ) const = 0;
+
+            virtual Buffer&
+            Framebuffer() = 0;
         };
 
     } // namespace Term
